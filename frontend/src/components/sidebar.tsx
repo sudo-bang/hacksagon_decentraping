@@ -1,33 +1,39 @@
 import { Monitor, Shield, Bell, BarChart3, Settings, User } from 'lucide-react';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const navItems = [
-  {
-    label: 'Monitors',
-    icon: <Monitor className="w-5 h-5" />,
-    href: '/monitors',
-  },
-  {
-    label: 'Security',
-    icon: <Shield className="w-5 h-5" />,
-    href: '/security',
-  },
-  {
-    label: 'Alerts',
-    icon: <Bell className="w-5 h-5" />,
-    href: '/alerts',
-  },
-  {
-    label: 'Analytics',
-    icon: <BarChart3 className="w-5 h-5" />,
-    href: '/analytics',
-  },
-  {
-    label: 'Settings',
-    icon: <Settings className="w-5 h-5" />,
-    href: '/settings',
-  },
+    {
+        label: 'DecentraPing',
+        icon: <Image src="/logo.png" alt="DecentraPing Logo" width={30} height={30} className="rounded-full" />,
+        href: '/',
+    },
+    {
+        label: 'Monitors',
+        icon: <Monitor className="w-5 h-5" />,
+        href: '/monitors',
+    },
+    {
+        label: 'Security',
+        icon: <Shield className="w-5 h-5" />,
+        href: '/security',
+    },
+    {
+        label: 'Alerts',
+        icon: <Bell className="w-5 h-5" />,
+        href: '/alerts',
+    },
+    {
+        label: 'Analytics',
+        icon: <BarChart3 className="w-5 h-5" />,
+        href: '/analytics',
+    },
+    {
+        label: 'Settings',
+        icon: <Settings className="w-5 h-5" />,
+        href: '/settings',
+    },
 ];
 
 export default function Sidebar() {
@@ -35,9 +41,6 @@ export default function Sidebar() {
 
   return (
     <aside className="fixed left-0 top-0 h-full w-16 bg-slate-800 border-r border-slate-700 flex flex-col items-center py-4 z-50">
-      <div className="w-8 h-8 bg-green-500 rounded-full mb-8 flex items-center justify-center">
-        <div className="w-4 h-4 bg-white rounded-sm"></div>
-      </div>
       <nav className="flex flex-col space-y-4">
         {navItems.map((item) => (
           <Link key={item.label} href={item.href} className="group relative">
