@@ -12,6 +12,8 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@sendgrid/mail": "^8.1.5",
     "@solana/web3.js": "^1.98.2",
     "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
@@ -21,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.1",
     "sendgrid": "^5.2.3",
+    "tweetnacl": "^1.0.3",
     "twilio": "^5.7.1"
   },
   "devDependencies": {

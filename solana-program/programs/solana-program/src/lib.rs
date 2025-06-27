@@ -4,7 +4,7 @@
 
 use anchor_lang::prelude::*;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"); // Replace with your new Program ID after deploying
+declare_id!("GQbbAJNxL4cy8ixzokQwBqeZYuguXz8aEedLwEuCa9KM"); // Replace with your new Program ID after deploying
 
 #[program]
 pub mod solana_program {

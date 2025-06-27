@@ -1,0 +1,151 @@
+{
+  "address": "GQbbAJNxL4cy8ixzokQwBqeZYuguXz8aEedLwEuCa9KM",
+  "metadata": {
+    "name": "solana_program",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "register_validator",
+      "discriminator": [
+        118,
+        98,
+        251,
+        58,
+        81,
+        30,
+        13,
+        240
+      ],
+      "accounts": [
+        {
+          "name": "validator_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  108,
+                  105,
+                  100,
+                  97,
+                  116,
+                  111,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_reputation",
+      "discriminator": [
+        194,
+        220,
+        43,
+        201,
+        54,
+        209,
+        49,
+        178
+      ],
+      "accounts": [
+        {
+          "name": "validator_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  108,
+                  105,
+                  100,
+                  97,
+                  116,
+                  111,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "validator_account.authority",
+                "account": "ValidatorAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "update_authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_reputation",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "ValidatorAccount",
+      "discriminator": [
+        32,
+        144,
+        229,
+        203,
+        9,
+        154,
+        158,
+        255
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "ValidatorAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "reputation",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ]
+}
