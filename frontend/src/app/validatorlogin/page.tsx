@@ -83,15 +83,15 @@ export default function ValidatorPortal() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
         <main className="flex-1 min-h-screen">
             {/* Header */}
-            <header className="px-8 py-8 border-b border-slate-700/50 bg-slate-900/90 backdrop-blur-sm shadow-xl">
+            <header className="px-8 py-8 border-b border-slate-700/30 bg-slate-900/95 backdrop-blur-sm shadow-xl">
             <div className="max-w-6xl mx-auto">
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-300 to-blue-400 bg-clip-text text-transparent">
                 Validator Portal
                 </h1>
-                <p className="text-slate-300 max-w-3xl text-lg leading-relaxed mt-4">
+                <p className="text-slate-400 max-w-3xl text-lg leading-relaxed mt-4">
                 Connect your Phantom wallet to access the DecentraPing validator network.
                 </p>
             </div>
@@ -101,12 +101,12 @@ export default function ValidatorPortal() {
             <section className="flex flex-col items-center justify-center py-20 px-4">
             <div className="relative">
                 {/* Glow effect */}
-                <div className="absolute inset-0 bg-blue-500/20 rounded-3xl blur-xl"></div>
+                <div className="absolute inset-0 bg-blue-600/10 rounded-3xl blur-xl"></div>
                 
-                <div className="relative bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 rounded-3xl shadow-2xl p-12 w-full max-w-lg">
+                <div className="relative bg-slate-800/80 backdrop-blur-sm border border-slate-600/40 rounded-3xl shadow-2xl p-12 w-full max-w-lg">
                 <div className="flex flex-col items-center text-center">
                     <div className="relative mb-6">
-                    <div className="p-4 bg-slate-700/50 rounded-2xl">
+                    <div className="p-4 bg-slate-700/60 rounded-2xl border border-slate-600/30">
                         <Wallet className="w-16 h-16 text-blue-400" />
                     </div>
                     {walletAddress && (
@@ -116,7 +116,7 @@ export default function ValidatorPortal() {
                     )}
                     </div>
 
-                    <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+                    <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent">
                     {walletAddress ? 'Wallet Connected' : 'Connect Your Wallet'}
                     </h2>
                     
@@ -130,7 +130,7 @@ export default function ValidatorPortal() {
                     {!walletAddress ? (
                     <div className="w-full">
                         <Button
-                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold flex items-center justify-center gap-3 text-lg shadow-lg transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold flex items-center justify-center gap-3 text-lg shadow-lg transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none border border-blue-500/20"
                         onClick={handleConnectWallet}
                         disabled={isConnecting}
                         >
@@ -157,7 +157,7 @@ export default function ValidatorPortal() {
                     </div>
                     ) : (
                     <div className="flex flex-col items-center gap-4 w-full">
-                        <div className="flex items-center gap-3 p-4 bg-slate-700/50 rounded-xl w-full">
+                        <div className="flex items-center gap-3 p-4 bg-slate-700/60 border border-slate-600/30 rounded-xl w-full">
                         <div className="flex-1 text-left">
                             <div className="text-sm text-slate-400 mb-1">Connected Address</div>
                             <div className="font-mono text-green-400 text-lg">
@@ -178,7 +178,7 @@ export default function ValidatorPortal() {
                         </div>
                         
                         <Button
-                        className="w-full bg-slate-700/70 hover:bg-slate-600/70 text-white px-4 py-3 rounded-xl transition-all duration-200"
+                        className="w-full bg-slate-700/80 hover:bg-slate-600/80 text-slate-200 px-4 py-3 rounded-xl transition-all duration-200 border border-slate-600/30"
                         onClick={handleDisconnect}
                         >
                         Disconnect Wallet
