@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, Settings, Bell, Shield, BarChart3, Monitor, ExternalLink, Clock, Globe, AlertTriangle, CheckCircle, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import Sidebar from '@/components/sidebar';
 
 interface MonitorDetails {
   id: string;
@@ -77,68 +77,10 @@ export default function MonitorDetailClient({ initialMonitorData }: MonitorDetai
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       {/* Fixed Left Sidebar */}
-      <aside className="fixed left-0 top-0 h-full w-64 bg-slate-800 border-r border-slate-700 flex flex-col z-50">
-        {/* Logo */}
-        <div className="p-4 border-b border-slate-700">
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-              <div className="w-3 h-3 bg-white rounded-sm"></div>
-            </div>
-            <span className="font-semibold text-white">UptimeRobot</span>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 p-4">
-          <div className="space-y-2">
-            <button
-              onClick={() => router.push('/')}
-              className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg bg-slate-700 text-green-400"
-            >
-              <Monitor className="w-4 h-4" />
-              <span className="text-sm">Monitoring</span>
-            </button>
-            <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-              <AlertTriangle className="w-4 h-4" />
-              <span className="text-sm">Incidents</span>
-            </button>
-            <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-              <Globe className="w-4 h-4" />
-              <span className="text-sm">Status pages</span>
-            </button>
-            <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-              <Settings className="w-4 h-4" />
-              <span className="text-sm">Maintenance</span>
-            </button>
-            <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-              <Shield className="w-4 h-4" />
-              <span className="text-sm">Team members</span>
-            </button>
-            <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-              <BarChart3 className="w-4 h-4" />
-              <span className="text-sm">Integrations & API</span>
-            </button>
-          </div>
-        </nav>
-
-        {/* Bottom Section */}
-        <div className="p-4 border-t border-slate-700">
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center text-xs font-semibold">
-              EE
-            </div>
-            <div className="flex-1">
-              <div className="text-sm font-medium">Efve Erf</div>
-            </div>
-          </div>
-          <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
-            Upgrade now
-          </Button>
-        </div>
-      </aside>
+      <Sidebar/>
 
       {/* Main Content */}
-      <main className="ml-64 mr-80">
+      <main className="ml-15 mr-80">
         {/* Header */}
         <header className="px-8 py-6 border-b border-slate-700">
           <div className="flex items-center space-x-4 mb-4">

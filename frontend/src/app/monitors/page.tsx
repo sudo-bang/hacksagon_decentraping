@@ -6,6 +6,7 @@ import { Search, Filter, Plus, Monitor, Settings, Bell, Shield, BarChart3, MoreH
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import Sidebar from '@/components/sidebar';
 
 interface MonitorData {
   id: string;
@@ -94,37 +95,7 @@ export default function MonitoringDashboard() {
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       {/* Fixed Left Sidebar */}
-      <aside className="fixed left-0 top-0 h-full w-16 bg-slate-800 border-r border-slate-700 flex flex-col items-center py-4 z-50">
-        <div className="w-8 h-8 bg-green-500 rounded-full mb-8 flex items-center justify-center">
-          <div className="w-4 h-4 bg-white rounded-sm"></div>
-        </div>
-        
-        <nav className="flex flex-col space-y-4">
-          <button className="p-2 rounded-lg bg-slate-700 text-green-400">
-            <Monitor className="w-5 h-5" />
-          </button>
-          <button className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-            <Shield className="w-5 h-5" />
-          </button>
-          <button className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-            <Bell className="w-5 h-5" />
-          </button>
-          <button className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-            <BarChart3 className="w-5 h-5" />
-          </button>
-          <button className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-            <Settings className="w-5 h-5" />
-          </button>
-        </nav>
-
-        <div className="mt-auto">
-          <button className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-            <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center text-xs font-semibold">
-              EE
-            </div>
-          </button>
-        </div>
-      </aside>
+      <Sidebar/>
 
       {/* Main Content */}
       <main className="ml-16 mr-80">

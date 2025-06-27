@@ -1,0 +1,82 @@
+import { Monitor, Shield, Bell, BarChart3, Settings, User } from 'lucide-react';
+import React, { useState } from 'react';
+import Link from 'next/link';
+
+const navItems = [
+  {
+    label: 'Monitors',
+    icon: <Monitor className="w-5 h-5" />,
+    href: '/monitors',
+  },
+  {
+    label: 'Security',
+    icon: <Shield className="w-5 h-5" />,
+    href: '/security',
+  },
+  {
+    label: 'Alerts',
+    icon: <Bell className="w-5 h-5" />,
+    href: '/alerts',
+  },
+  {
+    label: 'Analytics',
+    icon: <BarChart3 className="w-5 h-5" />,
+    href: '/analytics',
+  },
+  {
+    label: 'Settings',
+    icon: <Settings className="w-5 h-5" />,
+    href: '/settings',
+  },
+];
+
+export default function Sidebar() {
+  const [profileOpen, setProfileOpen] = useState(false);
+
+  return (
+    <aside className="fixed left-0 top-0 h-full w-16 bg-slate-800 border-r border-slate-700 flex flex-col items-center py-4 z-50">
+      <div className="w-8 h-8 bg-green-500 rounded-full mb-8 flex items-center justify-center">
+        <div className="w-4 h-4 bg-white rounded-sm"></div>
+      </div>
+      <nav className="flex flex-col space-y-4">
+        {navItems.map((item) => (
+          <Link key={item.label} href={item.href} className="group relative">
+            <button className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors w-full flex items-center justify-center focus:outline-none">
+              {item.icon}
+              <span className="absolute left-16 top-1/2 -translate-y-1/2 bg-slate-900 text-white text-xs font-medium px-3 py-1 rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all pointer-events-none whitespace-nowrap z-50 border border-slate-700">
+                {item.label}
+              </span>
+            </button>
+          </Link>
+        ))}
+      </nav>
+      <div className="mt-auto relative">
+        <button
+          className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+          onClick={() => setProfileOpen((v) => !v)}
+          aria-label="Profile menu"
+        >
+          <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center text-xs font-semibold">
+            <User className="w-5 h-5" />
+          </div>
+        </button>
+        {profileOpen && (
+          <div className="absolute left-16 bottom-0 mb-2 bg-slate-900 border border-slate-700 rounded-lg shadow-lg py-2 w-40 z-50 animate-fade-in-up">
+            <button
+              className="w-full text-left px-4 py-2 text-sm text-white hover:bg-slate-700 transition-colors"
+              onClick={() => { setProfileOpen(false); /* TODO: navigate to profile */ }}
+            >
+              View Profile
+            </button>
+            <button
+              className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-slate-700 transition-colors"
+              onClick={() => { setProfileOpen(false); /* TODO: log out logic */ }}
+            >
+              Log Out
+            </button>
+          </div>
+        )}
+      </div>
+    </aside>
+  );
+}
