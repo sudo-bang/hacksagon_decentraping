@@ -1,13 +1,8 @@
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
-import { TextEncoder, TextDecoder } from 'util';
+import { TextEncoder } from 'util';
 
 export const signData = (data, keypair) => {
-  // TODO:
-  // 1. Serialize the data object to a consistent string format (e.g., sorted JSON).
-  // 2. Encode the string as a Uint8Array.
-  // 3. Sign the bytes using the keypair's secret key.
-  // 4. Return the signature as a Base58 encoded string.
   const message = JSON.stringify(data);
   const messageBytes = new TextEncoder().encode(message);
   const signatureBytes = nacl.sign.detached(messageBytes, keypair.secretKey);
@@ -15,9 +10,14 @@ export const signData = (data, keypair) => {
 };
 
 export const verifySignature = (data, signature, publicKey) => {
-  // TODO:
-  // 1. Serialize the data object just like in the signData function.
-  // 2. Decode the Base58 signature and public key into bytes.
-  // 3. Use nacl.sign.detached.verify() to check the signature.
-  return true; // Placeholder
+  try {
+    const message = JSON.stringify(data);
+    const messageBytes = new TextEncoder().encode(message);
+    const signatureBytes = bs58.decode(signature);
+    const publicKeyBytes = bs58.decode(publicKey);
+    return nacl.sign.detached.verify(messageBytes, signatureBytes, publicKeyBytes);
+  } catch (error) {
+    console.error("Error verifying signature:", error.message);
+    return false;
+  }
 };

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import getSslCertificate from 'ssl-checker';
 import { signData } from './utils/solana.js';
 
 const POLLING_INTERVAL = 60 * 1000; // 60 seconds
@@ -6,7 +7,7 @@ const POLLING_INTERVAL = 60 * 1000; // 60 seconds
 export const runAsValidator = (config, keypair) => {
   console.log('Validator starting poll cycle...');
   
-  setInterval(async () => {
+  const poll = async () => {
     try {
       // 1. Poll the backend for jobs
       const response = await axios.get(`${config.apiEndpoint}/jobs`);
@@ -26,27 +27,45 @@ export const runAsValidator = (config, keypair) => {
     } catch (error) {
       console.error('❌ An error occurred during the poll cycle:', error.message);
     }
-  }, POLLING_INTERVAL);
+  };
+  
+  // Run immediately on start, then set the interval
+  poll();
+  setInterval(poll, POLLING_INTERVAL);
 };
 
 const performChecks = async (url) => {
-  // TODO: Implement the actual monitoring logic
-  // - Uptime check (e.g., using axios to see if it returns 200 OK)
-  // - Performance check (measure response time)
-  // - SSL check (using a library like `ssl-checker`)
   console.log(`-> Checking ${url}...`);
+  const result = {
+    uptime: false,
+    loadTime: -1,
+    sslValid: false,
+  };
+
+  // --- Uptime & Performance Check ---
   const startTime = Date.now();
   try {
-    await axios.get(url, { timeout: 5000 });
-    const loadTime = Date.now() - startTime;
-    return { uptime: true, loadTime, sslValid: true }; // Placeholder
+    const fullUrl = url.startsWith('http') ? url : `https://${url}`;
+    await axios.get(fullUrl, { timeout: 10000 });
+    result.uptime = true;
+    result.loadTime = Date.now() - startTime;
   } catch (error) {
-    return { uptime: false, loadTime: 0, sslValid: false }; // Placeholder
+    result.uptime = false;
   }
+
+  // --- SSL Check ---
+  try {
+    const hostname = new URL(url.startsWith('http') ? url : `https://${url}`).hostname;
+    const sslDetails = await getSslCertificate(hostname);
+    result.sslValid = sslDetails.valid;
+  } catch (error) {
+    result.sslValid = false;
+  }
+  
+  return result;
 };
 
 const sendReportToHub = async (hubUrl, siteId, result, publicKey, signature) => {
-  // TODO: Send the report to the Hub's listening endpoint
   try {
     const payload = {
       siteId,
@@ -54,7 +73,7 @@ const sendReportToHub = async (hubUrl, siteId, result, publicKey, signature) => 
       publicKey,
       signature,
     };
-    // await axios.post(`${hubUrl}/report`, payload);
+    await axios.post(`${hubUrl}/report`, payload);
     console.log(`✅ Report for ${siteId} sent to hub.`);
   } catch (error) {
     console.error(`❌ Failed to send report for ${siteId} to hub:`, error.message);
