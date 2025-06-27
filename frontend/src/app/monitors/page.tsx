@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Filter, Plus, Monitor, Settings, Bell, Shield, BarChart3, Clock, ChevronDown, MoreHorizontal } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Search, Filter, Plus, Monitor, Settings, Bell, Shield, BarChart3, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -22,7 +23,7 @@ export default function MonitoringDashboard() {
   const [selectedTags, setSelectedTags] = useState('All tags');
   const [sortOrder, setSortOrder] = useState('Down first');
   const [searchQuery, setSearchQuery] = useState('');
-  const [showNewMonitorModal, setShowNewMonitorModal] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
@@ -62,7 +63,7 @@ export default function MonitoringDashboard() {
   ];
 
   const handleMonitorClick = (monitor: MonitorData) => {
-    console.log('Monitor clicked:', monitor.name);
+    router.push(`/monitors/site/${monitor.id}`);
   };
 
   const getStatusColor = (status: string) => {
@@ -132,9 +133,8 @@ export default function MonitoringDashboard() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
               <h1 className="text-2xl font-semibold">Monitors</h1>
-              <Button
+              <Button 
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
-                onClick={() => setShowNewMonitorModal(true)}
               >
                 <Plus className="w-4 h-4" />
                 <span>New monitor</span>
@@ -197,7 +197,7 @@ export default function MonitoringDashboard() {
         {/* Monitor Cards */}
         <div className="p-8 space-y-4">
           {monitors.map((monitor) => (
-            <div
+            <button
               key={monitor.id}
               onClick={() => handleMonitorClick(monitor)}
               className="w-full p-6 bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-lg transition-all duration-200 hover:border-slate-600 text-left group"
@@ -236,7 +236,7 @@ export default function MonitoringDashboard() {
                   </button>
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </main>
@@ -314,29 +314,6 @@ export default function MonitoringDashboard() {
           </div>
         </div>
       </aside>
-
-      {showNewMonitorModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-900 text-white rounded-2xl shadow-2xl p-8 w-full max-w-md border border-slate-700 relative animate-fade-in-up">
-            <button
-              className="absolute top-4 right-4 text-slate-400 hover:text-white text-xl"
-              onClick={() => setShowNewMonitorModal(false)}
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <h2 className="text-2xl font-bold mb-4 text-primary">Add New Monitor</h2>
-            {/* Placeholder for form fields */}
-            <div className="text-slate-400 mb-4">(Form fields go here)</div>
-            <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg w-full mt-2"
-              onClick={() => setShowNewMonitorModal(false)}
-            >
-              Save (placeholder)
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
