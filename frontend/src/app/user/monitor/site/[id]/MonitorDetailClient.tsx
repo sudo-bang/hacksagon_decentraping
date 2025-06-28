@@ -61,6 +61,11 @@ export default function MonitorDetailClient({ initialMonitorData }: MonitorDetai
     }
   };
 
+  const handleLogout = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    };
+
   // The loading spinner will only show if the client component itself hasn't mounted yet
   // but the server has already rendered the outer shell.
   // For production, you might consider a skeleton UI instead of `null` or a full spinner here.
@@ -77,7 +82,7 @@ export default function MonitorDetailClient({ initialMonitorData }: MonitorDetai
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       {/* Fixed Left Sidebar */}
-      <Sidebar/>
+      <Sidebar handleLogout={handleLogout} />
 
       {/* Main Content */}
       <main className="ml-15 mr-80">
