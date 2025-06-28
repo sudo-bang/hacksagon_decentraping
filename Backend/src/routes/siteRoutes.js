@@ -50,4 +50,33 @@ router.get('/', authMiddleware, async (req, res) => {
   }
 });
 
+// --- NEW ENDPOINT ---
+// @route   GET /api/sites/:siteId/results
+// @desc    Get historical monitoring results for a single site
+// @access  Private
+router.get('/:siteId/results', authMiddleware, async (req, res) => {
+    try {
+        // 1. Find the site to make sure it exists and belongs to the user
+        const site = await MonitoredSite.findById(req.params.siteId);
+
+        if (!site) {
+            return res.status(404).json({ msg: 'Site not found' });
+        }
+
+        // 2. Check if the logged-in user owns this site
+        if (site.ownerId.toString() !== req.user.id) {
+            return res.status(401).json({ msg: 'User not authorized' });
+        }
+
+        // 3. Fetch all monitoring results for this site, sorted by most recent
+        const results = await MonitoringResult.find({ siteId: req.params.siteId }).sort({ timestamp: -1 });
+
+        res.json(results);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 export default router;
