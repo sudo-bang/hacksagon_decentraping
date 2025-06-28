@@ -4,7 +4,7 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 
 import authRoutes from './routes/authRoutes.js';
-import userRoutes from './routes/userRoutes.js'; // Assuming you will create this
+import userRoutes from './routes/userRoutes.js'; 
 import siteRoutes from './routes/siteRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
 

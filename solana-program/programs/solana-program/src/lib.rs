@@ -91,6 +91,3 @@ pub struct UpdateReputation<'info> {
     pub update_authority: Signer<'info>,
 }
 
-// In a real project, you would store the update_authority's public key
-// in another on-chain account (a config account) to make it changeable.
-// For a hackathon, hardcoding it in the client-side code is acceptable.

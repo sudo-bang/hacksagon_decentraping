@@ -63,6 +63,7 @@ const processConsensus = async (siteId, config, hubKeypair) => {
       hubSignature,
       hubPublicKey: hubKeypair.publicKey.toBase58(),
     };
+    console.log(`Hub: Finalizing consensus for ${siteId} with payload:`, payload);
     await axios.post(`${config.apiEndpoint}/jobs/finalize-job`, payload);
     console.log(`✅ Hub: Consensus for ${siteId} finalized and sent to backend.`);
   } catch (error) {

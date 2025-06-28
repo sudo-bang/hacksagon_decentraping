@@ -7,7 +7,10 @@ const deterministicStringify = (obj) => {
   Object.keys(obj).sort().forEach(key => {
     sortedObj[key] = obj[key];
   });
-  return JSON.stringify(sortedObj);
+  const str = JSON.stringify(sortedObj);
+  // --- DEBUG LOG ---
+  console.log(`[Kit] String to be signed/verified: ${str}`);
+  return str;
 };
 
 export const signData = (data, keypair) => {
@@ -20,6 +23,7 @@ export const signData = (data, keypair) => {
 export const verifySignature = (data, signature, publicKey) => {
   try {
     const message = deterministicStringify(data);
+    // FIX: The line below was missing.
     const messageBytes = new TextEncoder().encode(message); 
     const signatureBytes = bs58.decode(signature);
     const publicKeyBytes = bs58.decode(publicKey);

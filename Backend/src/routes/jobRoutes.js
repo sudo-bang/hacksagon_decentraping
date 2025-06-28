@@ -27,32 +27,29 @@ router.get('/', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
-// @route   POST /api/finalize-job
+// @route   POST /api/jobs/finalize-job
 // @desc    Called by a Hub to finalize a monitoring job
 // @access  Public (with signature checks)
 router.post('/finalize-job', async (req, res) => {
-  const { siteId, result, validatorSignatures } = req.body;
+  // FIX: Destructure the correct keys from the Hub's payload
+  const { siteId, result, participatingValidators, hubSignature, hubPublicKey } = req.body;
 
-  if (!siteId || !result || !validatorSignatures || validatorSignatures.length === 0) {
-    return res.status(400).json({ msg: 'Invalid payload' });
+  if (!siteId || !result || !participatingValidators || !hubSignature || !hubPublicKey) {
+    return res.status(400).json({ msg: 'Invalid payload from Hub' });
   }
 
   try {
-    // 1. Verify all signatures are legit
-    for (const valSig of validatorSignatures) {
-      const isVerified = verifySignature(result, valSig.signature, valSig.publicKey);
-      if (!isVerified) {
-        console.warn(`Invalid signature from validator: ${valSig.publicKey}`);
-        return res.status(401).json({ msg: `Invalid signature from ${valSig.publicKey}` });
-      }
+    // 1. Verify the Hub's signature
+    if (!verifySignature(result, hubSignature, hubPublicKey)) {
+      console.warn(`Invalid signature from HUB: ${hubPublicKey}`);
+      return res.status(401).json({ msg: `Invalid signature from Hub ${hubPublicKey}` });
     }
 
     // 2. Save the consensus result to the database
     const newResult = new MonitoringResult({
       siteId,
       result,
-      participatingValidators: validatorSignatures.map(v => v.publicKey),
+      participatingValidators: participatingValidators,
     });
     await newResult.save();
 
@@ -69,17 +66,16 @@ router.post('/finalize-job', async (req, res) => {
     site.lastChecked = Date.now();
     await site.save();
     
-    // 4. Update reputation on Solana (simple +1 for each successful report)
-    // In a real app, you'd fetch current reputation and increment it.
-    // For the hackathon, this call is simplified.
-    await solanaService.updateReputations(validatorSignatures.map(v => v.publicKey));
+    // 4. Update reputation on Solana for the Hub and all participating validators
+    const allParticipants = [...participatingValidators, hubPublicKey];
+    await solanaService.updateReputations(allParticipants);
 
     // 5. If the site just went down, send notifications
     if (shouldNotify) {
       await notificationService.sendDownAlert(siteId);
     }
     
-    res.status(200).json({ msg: "Job finalized successfully" });
+    res.status(200).json({ msg: "Job finalized successfully by Hub" });
 
   } catch (err) {
     console.error(err.message);
