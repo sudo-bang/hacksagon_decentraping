@@ -470,3 +470,76 @@ export interface SiteWithMonitoringData {
         averageLoadTime: number;
     };
 }
+
+/**
+ * Represents a single, raw monitoring result document from the database.
+ * The structure is inferred from its usage in the API endpoint.
+ */
+export interface MonitoringResult {
+    _id: string;
+    siteId: string;
+    timestamp: string; // Serialized as an ISO string
+    result: {
+        uptime: boolean;
+        loadTime: number; // in milliseconds
+        sslValid: boolean;
+    };
+    __v?: number;
+}
+
+
+export interface SiteWithAllData {
+    // Fields from MonitoredSiteSchema
+    _id: string;
+    ownerId: string;
+    url: string;
+    name: string;
+    isActive: boolean;
+    lastStatus: 'PENDING' | 'UP' | 'DOWN';
+    lastChecked: string | null;
+    notifyByEmail: boolean;
+    notifyBySms: boolean;
+    createdAt: string;
+    __v?: number;
+
+    // The added monitoring data object
+    monitoringData: {
+        /**
+         * An array of the last 10 uptime statuses (true for up, false for down).
+         * Padded with `null` at the beginning if fewer than 10 results exist.
+         * The order is chronological (oldest to newest).
+         */
+        uptime: (boolean | null)[];
+
+        /**
+         * An array of the last 10 page load times in milliseconds.
+         * Padded with `null` at the beginning if fewer than 10 results exist.
+         * The order is chronological (oldest to newest).
+         */
+        loadTime: (number | null)[];
+
+        /**
+         * An array of the last 10 SSL validation statuses (true for valid, false for invalid).
+         * Padded with `null` at the beginning if fewer than 10 results exist.
+         * The order is chronological (oldest to newest).
+         */
+        sslValid: (boolean | null)[];
+
+        /**
+         * The average uptime percentage over the available results, formatted to two decimal places.
+         */
+        averageUptime: number;
+
+        /**
+         * The average page load time in milliseconds over the available results, formatted to two decimal places.
+         */
+        averageLoadTime: number;
+
+        /**
+         * [NEW] An array of the full, unprocessed monitoring result objects.
+         * Contains up to the last 10 results.
+         * The order is chronological (oldest to newest).
+         */
+        results: MonitoringResult[];
+    };
+}
