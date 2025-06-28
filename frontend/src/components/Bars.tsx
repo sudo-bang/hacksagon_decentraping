@@ -6,7 +6,12 @@ const generateTestData = (totalBars = 30, uptimePercent = 95) => {
     return Array.from({ length: totalBars }, (_, i) => i >= downBars);
 };
 
-const UptimeBars = ({ uptimeData }: { uptimeData?: boolean[] }) => {
+function getBarColor(status: (boolean | null)) {
+    if (status === null) return 'bg-gray-500';
+    return status ? 'bg-green-500' : 'bg-red-500';
+}
+
+const UptimeBars = ({ uptimeData }: { uptimeData?: (boolean|null)[] }) => {
     // Use provided data or generate test data
     const barsData = uptimeData || generateTestData(30, 95);
 
@@ -20,11 +25,11 @@ const UptimeBars = ({ uptimeData }: { uptimeData?: boolean[] }) => {
                 {barsData.map((isUp, i) => (
                     <div
                         key={i}
-                        className={`w-2 h-8 rounded-sm ${isUp ? 'bg-green-500' : 'bg-red-500'}`}
+                        className={`w-2 h-8 rounded-sm ${getBarColor(isUp)}`}
                     />
                 ))}
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-200">
                 Uptime: {uptimePercent}%
             </div>
         </div>
