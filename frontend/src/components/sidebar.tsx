@@ -1,6 +1,5 @@
 import { Monitor, Shield, Bell, BarChart3, Settings, User } from 'lucide-react';
 import React, { useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 
 const navItems = [
@@ -12,7 +11,6 @@ const navItems = [
     {
         label: 'Monitors',
         icon: <Monitor className="w-5 h-5" />,
-        href: '/user/monitor',
     },
     {
         label: 'Security',
@@ -32,23 +30,27 @@ const navItems = [
     },
 ];
 
-export default function Sidebar({handleLogout}: {handleLogout: () => void}) {
+export default function Sidebar({ handleLogout }: { handleLogout: () => void }) {
     const [profileOpen, setProfileOpen] = useState(false);
 
     return (
         <aside className="fixed left-0 top-0 h-full w-16 bg-slate-800 border-r border-slate-700 flex flex-col items-center py-4 z-50">
             <nav className="flex flex-col space-y-4">
                 {navItems.map((item) => (
-                    // Using a standard <a> tag instead of Next.js Link
-                    <a key={item.label} href={item.href}>
-                        <button className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors w-full flex items-center justify-center focus:outline-none">
+                    item.href ?
+                        // Using a standard <a> tag instead of Next.js Link
+                        <a key={item.label} href={item.href} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors w-full flex items-center justify-center focus:outline-none">
                             {item.icon}
-                            {/* The span remains invisible as per your previous request */}
                             <span className="absolute left-16 top-1/2 -translate-y-1/2 bg-slate-900 text-white text-xs font-medium px-3 py-1 rounded-md shadow-lg opacity-0 whitespace-nowrap z-50 border border-slate-700">
                                 {item.label}
                             </span>
-                        </button>
-                    </a>
+                        </a>
+                        : <div key={item.label} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors w-full flex items-center justify-center focus:outline-none">
+                            {item.icon}
+                            <span className="absolute left-16 top-1/2 -translate-y-1/2 bg-slate-900 text-white text-xs font-medium px-3 py-1 rounded-md shadow-lg opacity-0 whitespace-nowrap z-50 border border-slate-700">
+                                {item.label}
+                            </span>
+                        </div>
                 ))}
             </nav>
             <div className="mt-auto relative">
@@ -64,13 +66,13 @@ export default function Sidebar({handleLogout}: {handleLogout: () => void}) {
                 {profileOpen && (
                     <div className="absolute left-16 bottom-0 mb-2 bg-slate-900 border border-slate-700 rounded-lg shadow-lg py-2 w-40 z-50 animate-fade-in-up">
                         <button
-                            className="w-full text-left px-4 py-2 text-sm text-white hover:bg-slate-700 transition-colors"
+                            className="w-full text-left px-4 py-2 text-sm text-white hover:bg-slate-700 transition-colors cursor-pointer"
                             onClick={() => { setProfileOpen(false); /* TODO: navigate to profile */ }}
                         >
                             View Profile
                         </button>
                         <button
-                            className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-slate-700 transition-colors"
+                            className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-slate-700 transition-colors cursor-pointer"
                             onClick={handleLogout}
                         >
                             Log Out
