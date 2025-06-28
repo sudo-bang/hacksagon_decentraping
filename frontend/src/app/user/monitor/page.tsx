@@ -81,10 +81,22 @@ export default function MonitoringDashboard() {
         }
     };
 
-    const getUptimeBarColor = (uptime: number) => {
-        if (uptime >= 99) return 'bg-green-500';
-        if (uptime >= 95) return 'bg-yellow-500';
-        return 'bg-red-500';
+    // Generate uptime bars - creating segments to represent uptime
+    const generateUptimeBars = (uptime: number) => {
+        const bars = [];
+        const totalBars = 24; // 24 segments for 24 hours representation
+        const downBars = Math.floor((100 - uptime) / 100 * totalBars);
+        
+        for (let i = 0; i < totalBars; i++) {
+            const isDown = i < downBars;
+            bars.push(
+                <div
+                    key={i}
+                    className={`w-1.5 h-6 rounded-sm ${isDown ? 'bg-red-500' : 'bg-green-500'}`}
+                />
+            );
+        }
+        return bars;
     };
 
     if (!isMounted) {
@@ -195,15 +207,14 @@ export default function MonitoringDashboard() {
                                     </div>
 
                                     <div className="w-48">
-                                        <div className="flex items-center justify-between mb-1">
+                                        <div className="flex items-center justify-between mb-2">
                                             <span className="text-xs text-slate-400">Uptime</span>
                                             <span className="text-xs font-medium text-white">{monitor.uptime}%</span>
                                         </div>
-                                        <div className="w-full bg-slate-700 rounded-full h-1.5">
-                                            <div
-                                                className={`h-1.5 rounded-full ${getUptimeBarColor(monitor.uptime)} transition-all duration-300`}
-                                                style={{ width: `${monitor.uptime}%` }}
-                                            ></div>
+                                        
+                                        {/* Updated Uptime Bar with Segments */}
+                                        <div className="flex items-center space-x-0.5">
+                                            {generateUptimeBars(monitor.uptime)}
                                         </div>
                                     </div>
                                 </div>
