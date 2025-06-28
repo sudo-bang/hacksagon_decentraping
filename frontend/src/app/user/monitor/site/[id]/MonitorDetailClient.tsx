@@ -115,14 +115,14 @@ export default function MonitorDetailClient({ initialMonitorData }: MonitorDetai
             </div>
 
             <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" className="border-slate-600 text-slate-400 hover:text-white">
+              <Button variant="outline" size="sm" className="border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-750 hover:border-slate-600 hover:text-white">
                 <Bell className="w-4 h-4 mr-2" />
                 Test Notification
               </Button>
-              <Button variant="outline" size="sm" className="border-slate-600 text-slate-400 hover:text-white">
+              <Button variant="outline" size="sm" className="border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-750 hover:border-slate-600 hover:text-white">
                 Pause
               </Button>
-              <Button variant="outline" size="sm" className="border-slate-600 text-slate-400 hover:text-white">
+              <Button variant="outline" size="sm" className="border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-750 hover:border-slate-600 hover:text-white">
                 Edit
               </Button>
             </div>
@@ -268,7 +268,7 @@ export default function MonitorDetailClient({ initialMonitorData }: MonitorDetai
             <h3 className="text-lg font-semibold text-white">Next maintenance</h3>
             <div className="text-center py-8">
               <div className="text-slate-400">No maintenance planned.</div>
-              <Button variant="outline" size="sm" className="border-slate-600 text-slate-400 hover:text-white">
+              <Button variant="outline" size="sm" className="border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-750 hover:border-slate-600 hover:text-white">
                 Set up maintenance
               </Button>
             </div>

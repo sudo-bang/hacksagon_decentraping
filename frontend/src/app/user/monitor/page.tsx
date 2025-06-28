@@ -223,13 +223,13 @@ export default function MonitoringDashboard() {
 
                         <div className="flex items-center space-x-4">
                             <Select value={selectedTags} onValueChange={setSelectedTags}>
-                                <SelectTrigger className="w-32 bg-slate-800 border-slate-600 text-white">
+                                <SelectTrigger className="w-32 bg-slate-800 border-slate-700 text-white hover:bg-slate-750 hover:border-slate-600">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-slate-800 border-slate-600">
-                                    <SelectItem value="All tags">All tags</SelectItem>
-                                    <SelectItem value="Production">Production</SelectItem>
-                                    <SelectItem value="Staging">Staging</SelectItem>
+                                <SelectContent className="bg-slate-800 border-slate-700">
+                                    <SelectItem value="All tags" className="text-white hover:bg-slate-750">All tags</SelectItem>
+                                    <SelectItem value="Production" className="text-white hover:bg-slate-750">Production</SelectItem>
+                                    <SelectItem value="Staging" className="text-white hover:bg-slate-750">Staging</SelectItem>
                                 </SelectContent>
                             </Select>
 
@@ -239,22 +239,22 @@ export default function MonitoringDashboard() {
                                     placeholder="Search by name or url"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="pl-10 w-64 bg-slate-800 border-slate-600 text-white placeholder-slate-400"
+                                    className="pl-10 w-64 bg-slate-800 border-slate-700 text-white placeholder-slate-400 hover:border-slate-600 focus:border-slate-500"
                                 />
                             </div>
 
                             <Select value={sortOrder} onValueChange={setSortOrder}>
-                                <SelectTrigger className="w-36 bg-slate-800 border-slate-600 text-white">
+                                <SelectTrigger className="w-36 bg-slate-800 border-slate-700 text-white hover:bg-slate-750 hover:border-slate-600">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-slate-800 border-slate-600">
-                                    <SelectItem value="Down first">Down first</SelectItem>
-                                    <SelectItem value="Up first">Up first</SelectItem>
-                                    <SelectItem value="Name A-Z">Name A-Z</SelectItem>
+                                <SelectContent className="bg-slate-800 border-slate-700">
+                                    <SelectItem value="Down first" className="text-white hover:bg-slate-750">Down first</SelectItem>
+                                    <SelectItem value="Up first" className="text-white hover:bg-slate-750">Up first</SelectItem>
+                                    <SelectItem value="Name A-Z" className="text-white hover:bg-slate-750">Name A-Z</SelectItem>
                                 </SelectContent>
                             </Select>
 
-                            <Button variant="outline" size="sm" className="border-slate-600 text-slate-400 hover:text-white">
+                            <Button variant="outline" size="sm" className="border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-750 hover:border-slate-600 hover:text-white">
                                 <Filter className="w-4 h-4 mr-2" />
                                 Filter
                             </Button>
