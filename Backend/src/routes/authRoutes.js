@@ -12,10 +12,10 @@ const router = express.Router();
 // @access  Public
 router.post('/register', async (req, res) => {
     console.log(req);
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // Basic validation
-    if (!email || !password) {
+    if (!name || !email || !password) {
         return res.status(400).json({ msg: 'Please enter all fields' });
     }
 
@@ -28,6 +28,7 @@ router.post('/register', async (req, res) => {
 
         // 2. Create new user instance
         user = new User({
+            name,
             email,
             password,
         });
