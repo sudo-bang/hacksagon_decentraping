@@ -7,64 +7,88 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Sidebar from '@/components/sidebar';
+import NewMonitorModal from '@/components/NewMonitorModal';
+import { formatDistanceToNow } from 'date-fns'; // Optional: install this for better time display
 
-interface MonitorData {
-    id: string;
+export interface MonitorData {
+    _id: string; // MongoDB ObjectId as string
+    ownerId: string; // Reference to User._id
     name: string;
     url: string;
-    status: 'up' | 'down' | 'paused';
-    uptime: number;
-    responseTime: number;
-    lastChecked: string;
-    incidents: number;
+    isActive: boolean;
+    lastStatus: 'PENDING' | 'UP' | 'DOWN';
+    lastChecked: string | Date | null;
+    notifyByEmail: boolean;
+    notifyBySms: boolean;
+    createdAt: string | Date;
+}
+
+function getStatusColor(status: string) {
+    switch (status) {
+        case 'UP':
+            return 'bg-green-500';
+        case 'DOWN':
+            return 'bg-red-500';
+        case 'PENDING':
+        default:
+            return 'bg-yellow-500';
+    }
 }
 
 export default function MonitoringDashboard() {
+    const [monitors, setMonitors] = useState<MonitorData[]>([]);
     const [isMounted, setIsMounted] = useState(false);
     const [selectedTags, setSelectedTags] = useState('All tags');
     const [sortOrder, setSortOrder] = useState('Down first');
     const [searchQuery, setSearchQuery] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
-    const monitors: MonitorData[] = [
-        {
-            id: '1',
-            name: 'google.com',
-            url: 'HTTP • Up 13 min, 24 sec',
-            status: 'up',
-            uptime: 100,
-            responseTime: 5,
-            lastChecked: '5 min',
-            incidents: 0
-        },
-        {
-            id: '2',
-            name: 'api.example.com',
-            url: 'HTTPS • Up 2 days, 14 hours',
-            status: 'up',
-            uptime: 99.9,
-            responseTime: 120,
-            lastChecked: '2 min',
-            incidents: 1
-        },
-        {
-            id: '3',
-            name: 'staging.app.com',
-            url: 'HTTP • Down 5 min, 32 sec',
-            status: 'down',
-            uptime: 95.2,
-            responseTime: 0,
-            lastChecked: '1 min',
-            incidents: 3
-        }
-    ];
+    // const monitors: MonitorData[] = [
+    //     {
+    //         _id: '1', // Simulated ObjectId
+    //         ownerId: '60d0fe4f5311236168a109ca', // Dummy ObjectId reference to a User
+    //         name: 'Google',
+    //         url: 'http://google.com',
+    //         isActive: true,
+    //         lastStatus: 'UP',
+    //         lastChecked: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
+    //         notifyByEmail: true,
+    //         notifyBySms: true,
+    //         createdAt: new Date(Date.now() - 13 * 60 * 1000 - 24 * 1000), // 13m24s ago
+    //     },
+    //     {
+    //         _id: '2',
+    //         ownerId: '60d0fe4f5311236168a109ca',
+    //         name: 'Some test app',
+    //         url: 'https://api.example.com',
+    //         isActive: true,
+    //         lastStatus: 'UP',
+    //         lastChecked: new Date(Date.now() - 2 * 60 * 1000), // 2 minutes ago
+    //         notifyByEmail: true,
+    //         notifyBySms: true,
+    //         createdAt: new Date(Date.now() - (2 * 24 * 60 + 14 * 60) * 60 * 1000), // 2d14h ago
+    //     },
+    //     {
+    //         _id: '3',
+    //         ownerId: '60d0fe4f5311236168a109ca',
+    //         name: 'My staging app',
+    //         url: 'http://staging.app.com',
+    //         isActive: true,
+    //         lastStatus: 'DOWN',
+    //         lastChecked: new Date(Date.now() - 1 * 60 * 1000), // 1 minute ago
+    //         notifyByEmail: true,
+    //         notifyBySms: true,
+    //         createdAt: new Date(Date.now() - 5 * 60 * 1000 - 32 * 1000), // 5m32s ago
+    //     },
+    // ];
 
     const handleMonitorClick = (monitor: MonitorData) => {
-        router.push(`/user/monitor/site/${monitor.id}`);
+        router.push(`/user/monitor/site/${monitor._id}`);
     };
 
     const handleLogout = () => {
@@ -72,32 +96,87 @@ export default function MonitoringDashboard() {
         window.location.href = '/';
     };
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'up': return 'bg-green-500';
-            case 'down': return 'bg-red-500';
-            case 'paused': return 'bg-yellow-500';
-            default: return 'bg-gray-500';
+    const fetchMonitors = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log('token not found');
+            // handleLogout(true);
+            return;
+        }
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/sites`, {
+                headers: {
+                    'x-auth-token': token,
+                },
+            });
+
+            if (response.status === 401) {
+                console.log('returned 401');
+                console.log(token);
+                // handleLogout(true);
+                return;
+            }
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error fetching monitors:', errorData.msg || response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+            setMonitors(data);
+        } catch (error) {
+            console.error('Error fetching monitors:', error);
         }
     };
 
-    // Generate uptime bars - creating segments to represent uptime
-    const generateUptimeBars = (uptime: number) => {
-        const bars = [];
-        const totalBars = 24; // 24 segments for 24 hours representation
-        const downBars = Math.floor((100 - uptime) / 100 * totalBars);
-        
-        for (let i = 0; i < totalBars; i++) {
-            const isDown = i < downBars;
-            bars.push(
-                <div
-                    key={i}
-                    className={`w-1.5 h-6 rounded-sm ${isDown ? 'bg-red-500' : 'bg-green-500'}`}
-                />
-            );
+
+
+    const handleAdd = async (data: { name: string; url: string }) => {
+        console.log('Submitted:', data);
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            handleLogout();
+            return;
         }
-        return bars;
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/sites/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': token,
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.status === 401) {
+                handleLogout();
+                return;
+            }
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert(errorData.msg || 'Failed to add site');
+                return;
+            }
+
+            const result = await response.json();
+            console.log('Site added:', result);
+            fetchMonitors();
+
+        } catch (error) {
+            console.error('Error adding site:', error);
+            alert('Something went wrong. Please try again later.');
+        }
     };
+
+    useEffect(() => {
+        fetchMonitors();
+    }, []);
+
 
     if (!isMounted) {
         return (
@@ -122,7 +201,8 @@ export default function MonitoringDashboard() {
                         <div className="flex items-center space-x-4">
                             <h1 className="text-2xl font-semibold">Monitors</h1>
                             <Button
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
+                                onClick={() => setIsModalOpen(true)}
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 cursor-pointer"
                             >
                                 <Plus className="w-4 h-4" />
                                 <span>New monitor</span>
@@ -184,15 +264,16 @@ export default function MonitoringDashboard() {
 
                 {/* Monitor Cards */}
                 <div className="p-8 space-y-4">
-                    {monitors.map((monitor) => (
+                    {monitors.map((monitor: MonitorData) => (
+
                         <button
-                            key={monitor.id}
+                            key={monitor._id}
                             onClick={() => handleMonitorClick(monitor)}
                             className="w-full p-6 bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-lg transition-all duration-200 hover:border-slate-600 text-left group cursor-pointer"
                         >
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between gap-4">
                                 <div className="flex items-center space-x-4">
-                                    <div className={`w-3 h-3 rounded-full ${getStatusColor(monitor.status)}`}></div>
+                                    <div className={`w-3 h-3 rounded-full ${getStatusColor(monitor.lastStatus)}`}></div>
                                     <div>
                                         <h3 className="font-medium text-white group-hover:text-blue-400 transition-colors">
                                             {monitor.name}
@@ -203,23 +284,27 @@ export default function MonitoringDashboard() {
 
                                 <div className="flex items-center space-x-8">
                                     <div className="text-right">
-                                        <div className="text-sm text-slate-400">{monitor.lastChecked}</div>
+                                        <div className="text-sm text-slate-400">
+                                            {monitor.lastChecked
+                                                ? `${formatDistanceToNow(new Date(monitor.lastChecked), { addSuffix: true })}`
+                                                : 'Never checked'}
+                                        </div>
                                     </div>
 
-                                    <div className="w-48">
-                                        <div className="flex items-center justify-between mb-2">
+                                    {/* Optional Uptime Placeholder */}
+                                    {/* <div className="w-48">
+                                        <div className="flex items-center justify-between mb-1">
                                             <span className="text-xs text-slate-400">Uptime</span>
-                                            <span className="text-xs font-medium text-white">{monitor.uptime}%</span>
+                                            <span className="text-xs font-medium text-white">--%</span>
                                         </div>
-                                        
-                                        {/* Updated Uptime Bar with Segments */}
-                                        <div className="flex items-center space-x-0.5">
-                                            {generateUptimeBars(monitor.uptime)}
+                                        <div className="w-full bg-slate-700 rounded-full h-1.5">
+                                            <div className="h-1.5 rounded-full bg-green-400 w-0"></div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </button>
+
                     ))}
                 </div>
             </main>
@@ -297,6 +382,13 @@ export default function MonitoringDashboard() {
                     </div>
                 </div>
             </aside>
+
+
+            <NewMonitorModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSubmit={handleAdd}
+            />
         </div>
     );
 }
