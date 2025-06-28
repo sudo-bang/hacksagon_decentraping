@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card } from '@/components/card';
 
 export default function DecentraPingLanding() {
     return (
@@ -14,11 +15,6 @@ export default function DecentraPingLanding() {
 
                 <div className="relative container mx-auto px-6 py-20 lg:py-32">
                     <div className="text-center max-w-4xl mx-auto">
-                        <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-600/20 border border-blue-500/30 backdrop-blur-sm mb-8">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAzNzYgMjM2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB4PSI0IiB5PSI0IiB3aWR0aD0iMzY4IiBoZWlnaHQ9IjIyOCIgcng9IjIwIiBzdHJva2U9IiMyMkM1NUUiIHN0cm9rZS13aWR0aD0iOCIvPgo8cmVjdCB4PSIyNCIgeT0iMjQiIHdpZHRoPSIyNDAiIGhlaWdodD0iMTQ0IiByeD0iNCIgZmlsbD0id2hpdGUiLz4KPHN2ZyB4PSIzMDAiIHk9IjMwIiB3aWR0aD0iNjAiIGhlaWdodD0iMTMyIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjU2IiBoZWlnaHQ9IjgiIHJ4PSI0IiBmaWxsPSIjMjJDNTVFIi8+CjxyZWN0IHg9IjAiIHk9IjE2IiB3aWR0aD0iNTYiIGhlaWdodD0iOCIgcng9IjQiIGZpbGw9IiMyMkM1NUUiLz4KPHJlY3QgeD0iMCIgeT0iMzIiIHdpZHRoPSI1NiIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iIzIyQzU1RSIvPgo8cmVjdCB4PSIwIiB5PSI0OCIgd2lkdGg9IjU2IiBoZWlnaHQ9IjgiIHJ4PSI0IiBmaWxsPSIjMjJDNTVFIi8+CjxyZWN0IHg9IjAiIHk9IjY0IiB3aWR0aD0iNTYiIGhlaWdodD0iOCIgcng9IjQiIGZpbGw9IiMyMkM1NUUiLz4KPC9zdmc+CjxjaXJjbGUgY3g9IjI1NiIgY3k9Ijc2IiByPSI4IiBmaWxsPSIjMjJDNTVFIi8+CjxwYXRoIGQ9Ik0xMzYgMTI0TDE5MiA4MEwyNTYgNzZMMzIwIDUyIiBzdHJva2U9IiMyMkM1NUUiIHN0cm9rZS13aWR0aD0iNCIgZmlsbD0ibm9uZSIvPgo8cmVjdCB4PSIxMDQiIHk9IjE4NCIgd2lkdGg9IjE2OCIgaGVpZ2h0PSI0MCIgcng9IjIwIiBmaWxsPSIjMjJDNTVFIi8+Cjwvc3ZnPgo=" alt="Monitoring icon" className="w-4 h-4 mr-2" />
-                            <span className="text-blue-300 text-sm font-medium">Built on Solana • Decentralized Monitoring</span>
-                        </div>
-
                         <h1 className="text-5xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-tight">
                             DecentraPing
                         </h1>
@@ -45,7 +41,7 @@ export default function DecentraPingLanding() {
                         {/* Dashboard Preview */}
                         <div className="relative mx-auto max-w-2xl">
                             <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/50 p-8 shadow-2xl">
-                                <div className="grid grid-cols-3 gap-4 mt-6">
+                                <div className="grid grid-cols-3 gap-4">
                                     <div className="text-center">
                                         <div className="text-2xl font-bold text-green-400">99.9%</div>
                                         <div className="text-sm text-slate-400">Uptime</div>
@@ -76,71 +72,36 @@ export default function DecentraPingLanding() {
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {/* Feature Card 1 */}
-                        <div className="group bg-gradient-to-b from-slate-800/50 to-slate-900/50 rounded-2xl p-8 border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 hover:transform hover:scale-105">
-                            <div className="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600/30 transition-colors">
-                                <span className="text-2xl">⚡</span>
-                            </div>
-                            <h3 className="text-xl font-semibold mb-3 text-blue-400">Real-time Monitoring</h3>
-                            <p className="text-slate-300 leading-relaxed">
-                                Continuous uptime and performance monitoring with instant alerts when issues are detected.
-                            </p>
-                        </div>
-
-                        {/* Feature Card 2 */}
-                        <div className="group bg-gradient-to-b from-slate-800/50 to-slate-900/50 rounded-2xl p-8 border border-slate-700/50 hover:border-blue-400/50 transition-all duration-300 hover:transform hover:scale-105">
-                            <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/30 transition-colors">
-                                <span className="text-2xl">🔒</span>
-                            </div>
-                            <h3 className="text-xl font-semibold mb-3 text-blue-300">Blockchain Security</h3>
-                            <p className="text-slate-300 leading-relaxed">
-                                Tamper-proof monitoring records stored on Solana blockchain for ultimate transparency.
-                            </p>
-                        </div>
-
-                        {/* Feature Card 3 */}
-                        <div className="group bg-gradient-to-b from-slate-800/50 to-slate-900/50 rounded-2xl p-8 border border-slate-700/50 hover:border-green-500/50 transition-all duration-300 hover:transform hover:scale-105">
-                            <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-500/30 transition-colors">
-                                <span className="text-2xl">🌐</span>
-                            </div>
-                            <h3 className="text-xl font-semibold mb-3 text-green-400">Decentralized Network</h3>
-                            <p className="text-slate-300 leading-relaxed">
-                                Global network of validators ensures no single point of failure or censorship.
-                            </p>
-                        </div>
-
-                        {/* Feature Card 4 */}
-                        <div className="group bg-gradient-to-b from-slate-800/50 to-slate-900/50 rounded-2xl p-8 border border-slate-700/50 hover:border-blue-400/50 transition-all duration-300 hover:transform hover:scale-105">
-                            <div className="w-12 h-12 bg-blue-400/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-400/30 transition-colors">
-                                <span className="text-2xl">🛡️</span>
-                            </div>
-                            <h3 className="text-xl font-semibold mb-3 text-blue-300">Security Checks</h3>
-                            <p className="text-slate-300 leading-relaxed">
-                                Comprehensive security scanning including SSL, malware detection, and vulnerability assessment.
-                            </p>
-                        </div>
-
-                        {/* Feature Card 5 */}
-                        <div className="group bg-gradient-to-b from-slate-800/50 to-slate-900/50 rounded-2xl p-8 border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 hover:transform hover:scale-105">
-                            <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/30 transition-colors">
-                                <span className="text-2xl">💎</span>
-                            </div>
-                            <h3 className="text-xl font-semibold mb-3 text-blue-400">Earn Rewards</h3>
-                            <p className="text-slate-300 leading-relaxed">
-                                Validators earn tokens for honest monitoring while users get reliable, incentivized service.
-                            </p>
-                        </div>
-
-                        {/* Feature Card 6 */}
-                        <div className="group bg-gradient-to-b from-slate-800/50 to-slate-900/50 rounded-2xl p-8 border border-slate-700/50 hover:border-blue-400/50 transition-all duration-300 hover:transform hover:scale-105">
-                            <div className="w-12 h-12 bg-blue-400/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-400/30 transition-colors">
-                                <span className="text-2xl">📊</span>
-                            </div>
-                            <h3 className="text-xl font-semibold mb-3 text-blue-300">Analytics Dashboard</h3>
-                            <p className="text-slate-300 leading-relaxed">
-                                Detailed performance analytics and historical data with beautiful, actionable insights.
-                            </p>
-                        </div>
+                        <Card 
+                            icon="⚡"
+                            title="Real-time Monitoring"
+                            description="Continuous uptime and performance monitoring with instant alerts when issues are detected."
+                        />
+                        <Card 
+                            icon="🔒"
+                            title="Blockchain Security"
+                            description="Tamper-proof monitoring records stored on Solana blockchain for ultimate transparency."
+                        />
+                        <Card 
+                            icon="🌐"
+                            title="Decentralized Network"
+                            description="Global network of independent validators ensures no single point of failure or censorship."
+                        />
+                        <Card 
+                            icon="🛡️"
+                            title="Security Checks"
+                            description="Comprehensive security scanning including SSL, malware detection, and vulnerability assessment."
+                        />
+                        <Card 
+                            icon="💎"
+                            title="Earn Rewards"
+                            description="Validators earn tokens for honest monitoring while users get reliable, incentivized service."
+                        />
+                        <Card 
+                            icon="📊"
+                            title="Analytics Dashboard"
+                            description="Detailed performance analytics and historical data with beautiful, actionable insights."
+                        />
                     </div>
                 </div>
             </section>
