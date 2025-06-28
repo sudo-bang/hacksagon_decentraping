@@ -7,6 +7,7 @@ import { ArrowLeft, Settings, Bell, Shield, BarChart3, Monitor, ExternalLink, Cl
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Sidebar from '@/components/sidebar';
+import UptimeBars from '@/components/Bars';
 
 interface MonitorDetails {
   id: string;
@@ -149,11 +150,14 @@ export default function MonitorDetailClient({ initialMonitorData }: MonitorDetai
             <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
               <h3 className="text-sm text-slate-400 mb-2">Last 24 hours</h3>
               <div className="text-2xl font-bold text-white mb-1">{monitor.uptime}%</div>
-              <div className="flex items-center space-x-2">
-                <div className="flex-1 bg-slate-700 rounded-full h-2">
-                  <div className="bg-green-500 h-2 rounded-full" style={{ width: `${monitor.uptime}%` }}></div>
+              
+              {/* Updated Uptime Bar with Segments - Contained within card */}
+              <div className="w-full overflow-hidden mb-2">
+                <div className="max-w-full">
+                  <UptimeBars/>
                 </div>
               </div>
+              
               <div className="text-sm text-slate-400 mt-2">0 incidents, 0m down</div>
             </div>
 

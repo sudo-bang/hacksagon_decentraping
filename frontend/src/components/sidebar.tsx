@@ -11,6 +11,7 @@ const navItems = [
     {
         label: 'Monitors',
         icon: <Monitor className="w-5 h-5" />,
+        href: '/user/monitor',
     },
     {
         label: 'Security',
