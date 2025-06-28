@@ -5,17 +5,19 @@ import { EtheralShadow } from '@/components/etheral-shadow';
 export default function DecentraPingLanding() {
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+            {/* Background with EtheralShadow */}
+            <div className="absolute top-0 left-0 w-full h-full">
+                <EtheralShadow
+                    color="rgba(59, 130, 246, 0.1)"
+                    animation={{ scale: 100, speed: 90 }}
+                    noise={{ opacity: 1, scale: 1.2 }}
+                    className="absolute w-full h-full"
+                />
+            </div>
+
             {/* Hero Section */}
-            <section className="relative overflow-hidden">
-                {/* Background with EtheralShadow */}
-                <div className="absolute inset-0">
-                    <EtheralShadow
-                        color="rgba(59, 130, 246, 0.1)"
-                        animation={{ scale: 100, speed: 90 }}
-                        noise={{ opacity: 1, scale: 1.2 }}
-                        className="w-full h-full"
-                    />
-                </div>
+            <section className="relative top-0 left-0 w-full h-screen overflow-hidden flex items-center">
+
 
                 <div className="relative container mx-auto px-6 py-20 lg:py-32">
                     <div className="text-center max-w-4xl mx-auto">
@@ -42,7 +44,6 @@ export default function DecentraPingLanding() {
                             </a>
                         </div>
 
-                        {/* Dashboard Preview */}
                         <div className="relative mx-auto max-w-2xl">
                             <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-2xl border border-slate-600/50 p-8 shadow-2xl">
                                 <div className="grid grid-cols-3 gap-4">
@@ -76,32 +77,32 @@ export default function DecentraPingLanding() {
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <Card 
+                        <Card
                             icon="⚡"
                             title="Real-time Monitoring"
                             description="Continuous uptime and performance monitoring with instant alerts when issues are detected."
                         />
-                        <Card 
+                        <Card
                             icon="🔒"
                             title="Blockchain Security"
                             description="Tamper-proof monitoring records stored on Solana blockchain for ultimate transparency."
                         />
-                        <Card 
+                        <Card
                             icon="🌐"
                             title="Decentralized Network"
                             description="Global network of independent validators ensures no single point of failure or censorship."
                         />
-                        <Card 
+                        <Card
                             icon="🛡️"
                             title="Security Checks"
                             description="Comprehensive security scanning including SSL, malware detection, and vulnerability assessment."
                         />
-                        <Card 
+                        <Card
                             icon="💎"
                             title="Earn Rewards"
                             description="Validators earn tokens for honest monitoring while users get reliable, incentivized service."
                         />
-                        <Card 
+                        <Card
                             icon="📊"
                             title="Analytics Dashboard"
                             description="Detailed performance analytics and historical data with beautiful, actionable insights."
