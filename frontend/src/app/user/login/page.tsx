@@ -60,7 +60,7 @@ export default function AuthPage() {
             ...prev,
             [name]: value,
         }));
-        
+
         // Clear error when user starts typing
         if (errors[name]) {
             setErrors(prev => ({
@@ -71,23 +71,21 @@ export default function AuthPage() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        // handle this properly
-        // currently its just some random bullshit 
         e.preventDefault();
-        
-        if (!validateForm()) {
-            return;
-        }
+
+        if (!validateForm()) return;
 
         setIsLoading(true);
-        
-        try {
-            const endpoint = isSignUp ? '/api/auth/register' : '/api/auth/login';
-            const payload = isSignUp 
-                ? { name: formData.name, email: formData.email, password: formData.password }
-                : { email: formData.email, password: formData.password };
 
-            const response = await fetch(endpoint, {
+        const action = isSignUp ? 'Registration' : 'Login'
+        const endpoint = isSignUp ? '/api/auth/register' : '/api/auth/login';
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+        const payload = isSignUp
+            ? { name: formData.name, email: formData.email, password: formData.password }
+            : { email: formData.email, password: formData.password };
+        try {
+            const response = await fetch(`${backendUrl}${endpoint}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -95,25 +93,25 @@ export default function AuthPage() {
                 body: JSON.stringify(payload),
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                console.log(`${isSignUp ? 'Registration' : 'Login'} successful:`, data);
-                
-                if (isSignUp) {
-                    // For sign up, you might want to show a success message or auto-login
-                    setErrors({ general: 'Account created successfully! Please sign in.' });
-                    setIsSignUp(false);
-                    setFormData(prev => ({ ...prev, password: '', confirmPassword: '', name: '' }));
-                } else {
-                    // Handle successful login (e.g., store token, redirect)
-                    window.location.href = '/monitors';
-                }
-            } else {
+            if (!response.ok) {
                 const errorData = await response.json();
-                setErrors({ general: errorData.message || `${isSignUp ? 'Registration' : 'Login'} failed. Please try again.` });
+                setErrors({ general: errorData.message || `${action} failed. Please try again.` });
+                return;
             }
+
+            const data = await response.json();
+            console.log(`${action} successful:`, data);
+
+            // Store token and redirect
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+                window.location.href = '/user/monitor';
+            } else {
+                setErrors({ general: `${action} successful but token missing.` });
+            }
+
         } catch (error) {
-            console.error(`${isSignUp ? 'Registration' : 'Login'} error:`, error);
+            console.error(`${action} error:`, error);
             setErrors({ general: 'Network error. Please check your connection and try again.' });
         } finally {
             setIsLoading(false);
@@ -145,8 +143,8 @@ export default function AuthPage() {
                         {isSignUp ? 'Create your account' : 'Welcome back'}
                     </h2>
                     <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                        {isSignUp 
-                            ? 'Sign up for your DecentraPing account' 
+                        {isSignUp
+                            ? 'Sign up for your DecentraPing account'
                             : 'Sign in to your DecentraPing account'
                         }
                     </p>
@@ -305,7 +303,7 @@ export default function AuthPage() {
                         {errors.general && (
                             <div className={cn(
                                 "border rounded-md p-4",
-                                errors.general.includes('successfully') 
+                                errors.general.includes('successfully')
                                     ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
                                     : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
                             )}>
@@ -348,7 +346,7 @@ export default function AuthPage() {
                             </a>
                         </div>
                     )}
-                    
+
                     <div className="mt-4 text-center">
                         <span className="text-sm text-gray-600 dark:text-gray-400">
                             {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}

@@ -32,7 +32,7 @@ const navItems = [
     },
 ];
 
-export default function App() {
+export default function Sidebar({handleLogout}: {handleLogout: () => void}) {
     const [profileOpen, setProfileOpen] = useState(false);
 
     return (
@@ -71,7 +71,7 @@ export default function App() {
                         </button>
                         <button
                             className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-slate-700 transition-colors"
-                            onClick={() => { setProfileOpen(false); /* TODO: log out logic */ }}
+                            onClick={handleLogout}
                         >
                             Log Out
                         </button>
