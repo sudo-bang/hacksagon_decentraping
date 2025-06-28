@@ -64,7 +64,7 @@ export default function MonitoringDashboard() {
   ];
 
   const handleMonitorClick = (monitor: MonitorData) => {
-    router.push(`/monitors/site/${monitor.id}`);
+    router.push(`/user/monitor/site/${monitor.id}`);
   };
 
   const getStatusColor = (status: string) => {
