@@ -9,16 +9,7 @@
   "instructions": [
     {
       "name": "register_validator",
-      "discriminator": [
-        118,
-        98,
-        251,
-        58,
-        81,
-        30,
-        13,
-        240
-      ],
+      "discriminator": [118, 98, 251, 58, 81, 30, 13, 240],
       "accounts": [
         {
           "name": "validator_account",
@@ -27,17 +18,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  118,
-                  97,
-                  108,
-                  105,
-                  100,
-                  97,
-                  116,
-                  111,
-                  114
-                ]
+                "value": [118, 97, 108, 105, 100, 97, 116, 111, 114]
               },
               {
                 "kind": "account",
@@ -65,16 +46,7 @@
     },
     {
       "name": "update_reputation",
-      "discriminator": [
-        194,
-        220,
-        43,
-        201,
-        54,
-        209,
-        49,
-        178
-      ],
+      "discriminator": [194, 220, 43, 201, 54, 209, 49, 178],
       "accounts": [
         {
           "name": "validator_account",
@@ -83,17 +55,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  118,
-                  97,
-                  108,
-                  105,
-                  100,
-                  97,
-                  116,
-                  111,
-                  114
-                ]
+                "value": [118, 97, 108, 105, 100, 97, 116, 111, 114]
               },
               {
                 "kind": "account",
@@ -119,35 +81,29 @@
   "accounts": [
     {
       "name": "ValidatorAccount",
-      "discriminator": [
-        32,
-        144,
-        229,
-        203,
-        9,
-        154,
-        158,
-        255
-      ],
+      "discriminator": [32, 144, 229, 203, 9, 154, 158, 255],
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "identity_authority",
-            "type": "pubkey"
-          },
-          {
-            "name": "operational_authority",
-            "type": "pubkey"
-          },
-          {
-            "name": "reputation",
-            "type": "u64"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
+          { "name": "identity_authority", "type": "pubkey" },
+          { "name": "operational_authority", "type": "pubkey" },
+          { "name": "reputation", "type": "u64" },
+          { "name": "bump", "type": "u8" }
+        ]
+      },
+      "size": 81
+    }
+  ],
+  "types": [
+    {
+      "name": "ValidatorAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "identity_authority", "type": "pubkey" },
+          { "name": "operational_authority", "type": "pubkey" },
+          { "name": "reputation", "type": "u64" },
+          { "name": "bump", "type": "u8" }
         ]
       }
     }

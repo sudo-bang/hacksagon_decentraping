@@ -1,52 +1,48 @@
-// This is a placeholder for your Anchor project.
-// Create a new project with `anchor init solana-program`
-// Then replace the contents of `/programs/solana-program/src/lib.rs` with this.
+// This is the updated code for your on-chain program.
+// It supports the new "Two-Wallet" registration system.
+// Place this in `/programs/solana-program/src/lib.rs` and redeploy.
 
 use anchor_lang::prelude::*;
 
-declare_id!("GQbbAJNxL4cy8ixzokQwBqeZYuguXz8aEedLwEuCa9KM"); // Replace with your new Program ID after deploying
+// Remember to replace this with your new Program ID after deploying.
+declare_id!("GQbbAJNxL4cy8ixzokQwBqeZYuguXz8aEedLwEuCa9KM"); 
 
 #[program]
 pub mod solana_program {
     use super::*;
 
-    // This instruction is called by a user from the frontend to register as a validator.
-    // The `authority` (the user's wallet) pays for the account creation.
-    pub fn register_validator(ctx: Context<RegisterValidator>) -> Result<()> {
-        // TODO:
-        // 1. Set the authority of the new ValidatorAccount to the signer's public key.
-        // 2. Set the initial reputation score.
-        // 3. (Optional) You could require a small SOL deposit as an initial stake.
+    // The user signs with their Identity Wallet, but passes in the public key
+    // of their newly generated Operational Wallet.
+    pub fn register_validator(ctx: Context<RegisterValidator>, operational_key: Pubkey) -> Result<()> {
+        let validator_account = &mut ctx.accounts.validator_account;
         
-        ctx.accounts.validator_account.authority = *ctx.accounts.authority.key;
-        ctx.accounts.validator_account.reputation = 10; // Starting reputation
-        ctx.accounts.validator_account.bump = ctx.bumps.validator_account;
+        validator_account.identity_authority = *ctx.accounts.identity_authority.key;
+        validator_account.operational_authority = operational_key;
+        validator_account.reputation = 10;
+        validator_account.bump = ctx.bumps.validator_account;
         
-        msg!("Validator {} registered successfully!", ctx.accounts.authority.key());
+        msg!("Validator registered successfully!");
+        msg!("Identity: {}", validator_account.identity_authority);
+        msg!("Operational: {}", validator_account.operational_authority);
         Ok(())
     }
 
-    // This instruction is called by the dedicated backend API to update a validator's score.
-    // It can only be called by the pre-defined `update_authority` (your backend's wallet).
+    // This function remains the same, but now it's clear which key is used.
+    // The backend will use the on-chain data to know which operational key to update.
     pub fn update_reputation(ctx: Context<UpdateReputation>, new_reputation: u64) -> Result<()> {
-        // TODO:
-        // 1. The main security check is already handled by the `has_one = update_authority` constraint.
-        //    Anchor will automatically reject the transaction if the signer is not the correct authority.
-        // 2. Update the reputation score on the validator's account.
-
         ctx.accounts.validator_account.reputation = new_reputation;
-        
-        msg!("Reputation for validator {} updated to {}!", ctx.accounts.validator_account.authority, new_reputation);
+        msg!("Reputation for validator {} updated to {}!", ctx.accounts.validator_account.identity_authority, new_reputation);
         Ok(())
     }
 }
 
 // --- Account State ---
-// This defines the structure of the data we store on-chain for each validator.
+// The account now stores both keys for clarity and security.
 #[account]
 pub struct ValidatorAccount {
-    pub authority: Pubkey, // The validator's wallet address
-    pub reputation: u64,   // The reputation score
+    pub identity_authority: Pubkey,    // The main wallet that controls this account.
+    pub operational_authority: Pubkey, // The key the kit uses to sign reports.
+    pub reputation: u64,
     pub bump: u8,
 }
 
@@ -54,40 +50,35 @@ pub struct ValidatorAccount {
 
 #[derive(Accounts)]
 pub struct RegisterValidator<'info> {
-    // This creates a new account on-chain, owned by our program.
-    // The space is calculated to hold a Pubkey (32 bytes), u64 (8 bytes), and u8 (1 byte).
-    // The PDA seeds ensure that each validator can only have one reputation account.
+    // The PDA is now seeded by the IDENTITY authority, ensuring one user can only
+    // have one validator account.
     #[account(
         init, 
-        payer = authority, 
-        space = 8 + 32 + 8 + 1, 
-        seeds = [b"validator", authority.key().as_ref()], 
+        payer = identity_authority, 
+        space = 8 + 32 + 32 + 8 + 1, // Increased space for the second public key
+        seeds = [b"validator", identity_authority.key().as_ref()], 
         bump
     )]
     pub validator_account: Account<'info, ValidatorAccount>,
     
-    // The user who is signing the transaction to register.
+    // The user's main wallet, signing the transaction.
     #[account(mut)]
-    pub authority: Signer<'info>,
+    pub identity_authority: Signer<'info>,
     
-    // The official System Program, required by Solana for creating accounts.
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
 pub struct UpdateReputation<'info> {
-    // We specify the validator account to update.
-    // The `has_one = update_authority` constraint is a critical security check.
-    // It ensures that only the wallet specified as `update_authority` can sign this transaction.
+    // We find the account using the identity authority, but the reputation update
+    // is based on the work of the operational authority.
     #[account(
         mut,
-        seeds = [b"validator", validator_account.authority.as_ref()],
+        seeds = [b"validator", validator_account.identity_authority.as_ref()],
         bump = validator_account.bump
     )]
     pub validator_account: Account<'info, ValidatorAccount>,
     
-    // The authority that is allowed to update reputations (your backend's wallet).
-    // This is NOT the validator themselves.
+    // The backend's wallet is still the only one allowed to update scores.
     pub update_authority: Signer<'info>,
 }
-

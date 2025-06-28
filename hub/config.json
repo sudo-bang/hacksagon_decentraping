@@ -1,7 +1,0 @@
-{
-  "keypairPath": "./validator-keypair.json",
-  "apiEndpoint": "http://localhost:5000/api",
-  "isHub": true,
-  "hubUrl": "http://localhost:9090",
-  "port": 9090
-}
