@@ -85,7 +85,7 @@ export default function MonitorDetailClient({ initialMonitorData }: MonitorDetai
         <header className="px-8 py-6 border-b border-slate-700">
           <div className="flex items-center space-x-4 mb-4">
             <button
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/user/monitor')}
               className="p-2 text-slate-400 hover:text-white transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
