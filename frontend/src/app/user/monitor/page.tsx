@@ -176,7 +176,7 @@ export default function MonitoringDashboard() {
                         <button
                             key={monitor.id}
                             onClick={() => handleMonitorClick(monitor)}
-                            className="w-full p-6 bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-lg transition-all duration-200 hover:border-slate-600 text-left group"
+                            className="w-full p-6 bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-lg transition-all duration-200 hover:border-slate-600 text-left group cursor-pointer"
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-4">
@@ -206,10 +206,6 @@ export default function MonitoringDashboard() {
                                             ></div>
                                         </div>
                                     </div>
-
-                                    <button className="p-1 text-slate-400 hover:text-white transition-colors">
-                                        <MoreHorizontal className="w-4 h-4" />
-                                    </button>
                                 </div>
                             </div>
                         </button>
