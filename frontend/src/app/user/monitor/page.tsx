@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Filter, Plus, Monitor, Settings, Bell, Shield, BarChart3, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -32,6 +32,31 @@ export default function MonitoringDashboard() {
     const [searchQuery, setSearchQuery] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter();
+
+    const summary = useMemo(() => {
+        let upCount = 0;
+        let downCount = 0;
+        let pauseCount = 0;
+        monitors.forEach((monitor) => {
+            if (monitor.isActive) {
+                if (monitor.lastStatus.toLowerCase() === 'up') {
+                    upCount++;
+                } else if (monitor.lastStatus.toLowerCase() === 'down') {
+                    downCount++;
+                } else {
+                    pauseCount++;
+                }
+            }
+            else {
+                pauseCount++;
+            }
+        });
+        return {
+            upCount,
+            downCount,
+            pauseCount
+        };
+    }, [monitors]);
 
     useEffect(() => {
         setIsMounted(true);
@@ -81,8 +106,6 @@ export default function MonitoringDashboard() {
         }
     };
 
-
-
     const handleAdd = async (data: { name: string; url: string }) => {
         console.log('Submitted:', data);
 
@@ -123,10 +146,19 @@ export default function MonitoringDashboard() {
         }
     };
 
+    // Updated useEffect to poll every 5 seconds
     useEffect(() => {
+        // Call immediately on mount
         fetchMonitors();
-    }, []);
 
+        // Set up interval to call every 5 seconds
+        const interval = setInterval(() => {
+            fetchMonitors();
+        }, 5000);
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(interval);
+    }, []);
 
     if (!isMounted) {
         return (
@@ -295,26 +327,26 @@ export default function MonitoringDashboard() {
 
                         <div className="grid grid-cols-3 gap-4 text-center">
                             <div>
-                                <div className="text-2xl font-bold text-white">0</div>
+                                <div className="text-2xl font-bold text-white">{summary.downCount}</div>
                                 <div className="text-sm text-slate-400">Down</div>
                             </div>
                             <div>
-                                <div className="text-2xl font-bold text-white">1</div>
+                                <div className="text-2xl font-bold text-white">{summary.upCount}</div>
                                 <div className="text-sm text-slate-400">Up</div>
                             </div>
                             <div>
-                                <div className="text-2xl font-bold text-white">0</div>
+                                <div className="text-2xl font-bold text-white">{summary.pauseCount}</div>
                                 <div className="text-sm text-slate-400">Paused</div>
                             </div>
                         </div>
 
                         <div className="mt-4 text-center text-sm text-slate-400">
-                            Using 1 of 50 monitors
+                            Using {monitors.length} of 50 monitors
                         </div>
                     </div>
 
                     {/* Last 24 Hours */}
-                    <div>
+                    {/* <div>
                         <h3 className="text-lg font-semibold mb-4 flex items-center">
                             Last 24 hours
                             <button className="ml-auto p-1 text-slate-400 hover:text-white transition-colors">
@@ -345,10 +377,9 @@ export default function MonitoringDashboard() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </aside>
-
 
             <NewMonitorModal
                 isOpen={isModalOpen}
